@@ -20,13 +20,13 @@ pub trait ReadDoc {
         &self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R>;
+    ) -> am::iter::MapRange<'_, R>;
 
     fn list_range<O: AsRef<ObjId>, R: RangeBounds<usize>>(
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R>;
+    ) -> am::iter::ListRange<'_, R>;
 
     fn length<O: AsRef<ObjId>>(&self, obj: O) -> usize;
 
@@ -109,7 +109,7 @@ impl ReadDoc for am::AutoCommit {
         &self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -117,7 +117,7 @@ impl ReadDoc for am::AutoCommit {
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 
@@ -134,7 +134,7 @@ impl ReadDoc for am::AutoCommit {
     }
 }
 
-impl<'a, Obs: am::transaction::Observation> ReadDoc for am::transaction::Transaction<'a, Obs> {
+impl<'a> ReadDoc for am::transaction::Transaction<'a> {
     type Parents<'b> = am::Parents<'b> where Self: 'b;
     fn get_heads(&self) -> Vec<am::ChangeHash> {
         am::transaction::Transactable::base_heads(self)
@@ -158,7 +158,7 @@ impl<'a, Obs: am::transaction::Observation> ReadDoc for am::transaction::Transac
         &self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -166,7 +166,7 @@ impl<'a, Obs: am::transaction::Observation> ReadDoc for am::transaction::Transac
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 
@@ -207,7 +207,7 @@ impl ReadDoc for am::Automerge {
         &self,
         obj: O,
         range: R,
-    ) -> am::MapRange<'_, R> {
+    ) -> am::iter::MapRange<'_, R> {
         am::ReadDoc::map_range(self, obj, range)
     }
 
@@ -215,7 +215,7 @@ impl ReadDoc for am::Automerge {
         &self,
         obj: O,
         range: R,
-    ) -> am::ListRange<'_, R> {
+    ) -> am::iter::ListRange<'_, R> {
         am::ReadDoc::list_range(self, obj, range)
     }
 
